@@ -25,11 +25,30 @@ def about():
     return render_template('about.html', name="Mary Jane")
 
 
+@app.route('/property/')
+def new_property():
+
+    return render_template('property.html')
+
+
+@app.route('/properties/')
+def properties():
+
+    return render_template('properties.html')
+
+
+@app.route('/property/<propertyid>')
+def specific_property():
+
+    return render_template('property.html')
+
 ###
 # The functions below should be applicable to all Flask apps.
 ###
 
 # Display Flask WTF errors as Flash messages
+
+
 def flash_errors(form):
     for field, errors in form.errors.items():
         for error in errors:
@@ -37,6 +56,7 @@ def flash_errors(form):
                 getattr(form, field).label.text,
                 error
             ), 'danger')
+
 
 @app.route('/<file_name>.txt')
 def send_text_file(file_name):
@@ -64,4 +84,4 @@ def page_not_found(error):
 
 
 if __name__ == '__main__':
-    app.run(debug=True,host="0.0.0.0",port="8080")
+    app.run(debug=True, host="0.0.0.0", port="8080")
