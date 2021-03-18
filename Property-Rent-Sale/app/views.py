@@ -32,7 +32,7 @@ def new_property():
 
 
 @app.route('/properties/')
-def properties():
+def all_properties():
 
     return render_template('properties.html')
 
