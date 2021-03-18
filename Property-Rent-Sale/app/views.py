@@ -6,12 +6,14 @@ This file creates your application.
 """
 
 from app import app
-from flask import render_template, request, redirect, url_for
+from flask import render_template, request, redirect, url_for, flash
 
+from app.forms import PropertyForm
 
 ###
 # Routing for your application.
 ###
+
 
 @app.route('/')
 def home():
@@ -22,13 +24,35 @@ def home():
 @app.route('/about/')
 def about():
     """Render the website's about page."""
-    return render_template('about.html', name="Mary Jane")
+    return render_template('about.html', name="S~Jones")
 
 
-@app.route('/property/')
+@app.route('/property/', methods=['GET', 'POST'])
 def new_property():
+    # Loads up the form
+    property_form = PropertyForm()
 
-    return render_template('property.html')
+    # Checks for method type and validatation
+    if request.method == 'POST':
+        if property_form.validate_on_submit():
+
+            # Collect the data from the form
+            title = property_form.p_title.data
+            description = property_form.p_description.data
+            rooms = property_form.rooms.data
+            bathrooms = property_form.bathrooms.data
+            price = property_form.price.data
+            p_type = property_form.p_type.data
+            location = property_form.location.data
+            photo = property_form.photo.data
+
+            # Redirects user to the Properties page
+            flash('New Property Added Successfully!', 'success')
+            return redirect(url_for('all_properties'))
+    else:
+        flash_errors(property_form)
+
+    return render_template('property.html', form=property_form)
 
 
 @app.route('/properties/')

@@ -8,11 +8,42 @@
     {{ form.csrf_token }}
 
     <div class="form-group">
-        {{ form.name.label }} 
-        {{ form.name(class="form-control") }}
+        {{ form.p_title.label }} 
+        {{ form.p_title(class="form-control") }}
     </div>
 
-    <button type="send" class="btn">Send</button>
+    <div class="form-group">
+        {{ form.p_description.label }} 
+        {{ form.p_description(class="form-control") }}
+    </div>
+
+    <div class="form-group">
+        <div class="grid">
+            {{ form.rooms.label }} 
+            {{ form.rooms(class="form-control", placeholder="3") }}
+
+            {{ form.bathrooms.label }} 
+            {{ form.bathrooms(class="form-control", placeholder="2") }}
+
+            {{ form.price.label }} 
+            {{ form.price(class="form-control", placeholder="15,000,000") }}
+
+            {{ form.p_type.label }} 
+            {{ form.p_type(class="form-control", placeholder="House") }}
+        </div>
+    </div>
+
+    <div class="form-group">
+        {{ form.location.label }} 
+        {{ form.location(class="form-control", placeholder="10 Waterloo Rd") }}
+    </div>
+
+    <div class="form-group">
+        {{ form.photo.label }} 
+        {{ form.photo(class="form-control") }}
+    </div>
+
+    <button type="submit" class="btn">Add Property</button>
 </form>
 
 {% endblock %}
