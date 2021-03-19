@@ -9,6 +9,19 @@ from app import app
 from flask import render_template, request, redirect, url_for, flash
 
 from app.forms import PropertyForm
+from app import db
+from app.models import Property
+
+import os
+import psycopg2
+
+# Connects to the Database
+
+
+def connect_db():
+    return psycopg2.connect(host="localhost",
+                            database="mydb", user="someuser", password="somepass")
+
 
 ###
 # Routing for your application.
@@ -37,14 +50,23 @@ def new_property():
         if property_form.validate_on_submit():
 
             # Collect the data from the form
-            title = property_form.p_title.data
+            p_title = property_form.p_title.data
             description = property_form.p_description.data
             rooms = property_form.rooms.data
             bathrooms = property_form.bathrooms.data
             price = property_form.price.data
             p_type = property_form.p_type.data
             location = property_form.location.data
+
             photo = property_form.photo.data
+            filename = secure_filename(photo.filename)
+            photo.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+
+            # Create a Property object
+            property = Property(p_title, description, rooms,
+                                bathrooms, price, p_type, location, photo)
+            db.session.add(property)
+            db.session.commit()
 
             # Redirects user to the Properties page
             flash('New Property Added Successfully!', 'success')
@@ -58,13 +80,24 @@ def new_property():
 @app.route('/properties/')
 def all_properties():
 
-    return render_template('properties.html')
+    # Connect to the database
+    db = connect_db()
+    cur = db.cursor()
+
+    cur.executes('SELECT * FROM Properties')
+    properties = cur.fetchall()
+
+    return render_template('properties.html', properties=properties)
 
 
 @app.route('/property/<propertyid>')
-def specific_property():
+def specific_property(property_id):
+    property_id = int(property_id)
 
-    return render_template('property.html')
+    # Locates the Property with the matching ID
+    property = Property.query.filter_by(id=property_id).first()
+
+    return render_template('property.html', property=property)
 
 ###
 # The functions below should be applicable to all Flask apps.
