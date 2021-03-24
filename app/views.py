@@ -6,11 +6,14 @@ This file creates your application.
 """
 
 from app import app
-from flask import render_template, request, redirect, url_for, flash
+from flask import render_template, request, redirect, url_for
+from flask import flash, session, abort, send_from_directory
 
 from app.forms import PropertyForm
 from app import db
 from app.models import Property
+
+from werkzeug.utils import secure_filename
 
 import os
 import psycopg2
@@ -63,9 +66,8 @@ def new_property():
             photo.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
 
             # Create a Property object
-            property = Property(p_title, description, rooms,
-                                bathrooms, price, p_type, location, photo)
-            db.session.add(property)
+            my_property = Property(p_title, description, rooms, bathrooms, price, p_type, location, filename)
+            db.session.add(my_property)
             db.session.commit()
 
             # Redirects user to the Properties page
@@ -81,23 +83,29 @@ def new_property():
 def all_properties():
 
     # Connect to the database
-    db = connect_db()
-    cur = db.cursor()
+    # db = connect_db()
+    # cur = db.cursor()
 
-    cur.executes('SELECT * FROM Properties')
-    properties = cur.fetchall()
+    # cur.executes('SELECT * FROM property')
+    # properties = cur.fetchall()
+    properties = Property.query.all()
 
     return render_template('properties.html', properties=properties)
 
 
-@app.route('/property/<propertyid>')
+@app.route('/property/<property_id>')
 def specific_property(property_id):
     property_id = int(property_id)
 
     # Locates the Property with the matching ID
-    property = Property.query.filter_by(id=property_id).first()
+    my_property = Property.query.filter_by(id=property_id).first()
 
-    return render_template('property.html', property=property)
+    return render_template('single_property.html', property=my_property)
+
+@app.route('/uploads/<filename>')
+def get_uploaded_images(filename):
+    rootdir = os.getcwd()
+    return  send_from_directory(os.path.join(rootdir,app.config['UPLOAD_FOLDER']), filename)
 
 ###
 # The functions below should be applicable to all Flask apps.

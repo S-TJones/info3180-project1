@@ -4,7 +4,7 @@
 
 <h1 class="page-header">Add New Property</h1>
 
-<form action="{{ url_for('all_properties') }}" method="post">
+<form action="{{ url_for('new_property') }}" method="POST" enctype="multipart/form-data">
     {{ form.csrf_token }}
 
     <div class="form-group">
@@ -43,7 +43,7 @@
         {{ form.photo(class="form-control") }}
     </div>
 
-    <button type="submit" class="btn">Add Property</button>
+    <button name="submit" type="submit" class="btn">Add Property</button>
 </form>
 
 {% endblock %}

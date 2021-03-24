@@ -2,4 +2,20 @@
 
 {% block main %}
 <h1 class="page-header">Properties</h1>
+
+{% include 'flash_messages.html' %}
+
+<div class="properties">
+    {% for property in properties %}
+    <div class="property">
+        <img class ='propimg' src = "{{ url_for('get_uploaded_images', filename=property.photo) }}" alt ="Photo of the Property"> <br />
+        {{ property.title }}<br />
+        {{ property.location }}<br />
+        {{ property.price }}<br />
+        <a href="{{ url_for('specific_property', property_id=property.id) }}" class="property-link">View Property</a>
+        
+    </div>
+    {% endfor %}
+</div>
+
 {% endblock %}

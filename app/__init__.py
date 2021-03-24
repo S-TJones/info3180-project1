@@ -3,8 +3,7 @@ from flask import Flask
 from .config import Config
 from flask_sqlalchemy import SQLAlchemy
 
-# Storage Location
-UPLOAD_FOLDER = './app/static/uploads'
+
 
 app = Flask(__name__)
 # app.debug = True

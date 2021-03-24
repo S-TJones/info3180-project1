@@ -8,14 +8,14 @@ from . import db
 class Property(db.Model):
 
     # Attributes
-    __tablename__ = 'Properties'  # Table Name
+    #__tablename__ = 'Properties'  # Table Name
 
     id = db.Column(db.Integer, primary_key=True)
-    title = db.Column(db.String(80))
+    title = db.Column(db.String(100))
     description = db.Column(db.Text())
-    bedrooms = db.Column(db.Integer)
-    bathrooms = db.Column(db.Integer)
-    price = db.Column(db.Integer)
+    bedrooms = db.Column(db.String(10))
+    bathrooms = db.Column(db.String(10))
+    price = db.Column(db.String(30))
     p_type = db.Column(db.String(20))
     location = db.Column(db.String(200), unique=True)
     photo = db.Column(db.String(150))
