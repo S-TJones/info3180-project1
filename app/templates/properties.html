@@ -5,14 +5,14 @@
 
 {% include 'flash_messages.html' %}
 
-<div class="properties">
+<div class="all-properties">
     {% for property in properties %}
     <div class="property">
-        <img class ='propimg' src = "{{ url_for('get_uploaded_images', filename=property.photo) }}" alt ="Photo of the Property"> <br />
-        {{ property.title }}<br />
-        {{ property.location }}<br />
-        {{ property.price }}<br />
-        <a href="{{ url_for('specific_property', property_id=property.id) }}" class="property-link">View Property</a>
+        <img src="{{ url_for('get_uploaded_images', filename=property.photo) }}" alt ="Photo of the Property"> <br />
+        <p class="property-title">{{ property.title }}</p>
+        <p class="property-location">{{ property.location }}</p>
+        <p class="property-price">{{ property.price }}</p>
+        <a href="{{ url_for('specific_property', property_id=property.id) }}" class="go-to">View Property</a>
         
     </div>
     {% endfor %}
